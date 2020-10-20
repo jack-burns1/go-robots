@@ -1,0 +1,83 @@
+/**********************************************************
+* Proj 1 - Part 2 & 3
+* Comp 15
+* README
+* Jack Burns
+*********************************************************/
+
+Compile/run:
+     - Compile using
+            make gorobots
+     - run executable with
+            ./gorobots [board input file]
+
+
+Program Purpose:
+
+This project reads in a file containing a set of chars that represent a game
+board for a gorobots game. It creates a board out of this text, and puts a 
+'robot' char in the desired start position. The game can run in interactive
+mode, in which the instance of the current board is printed to cout after 
+every turn, until the user's robot reaches the finish spot (*). It also can
+run in an automatic mode, in which a tree of possible moves is created for 
+the robot's starting pos, and the program finds a path to the finish, and 
+prints it to cout. 
+
+
+Files: 
+
+main.cpp:
+    Creates an instance of a board, and calls appropriate
+    functions to create the board. The program is directed based on the user
+    input to either run with a tree (auto mode) or through interactive mode
+
+Board.cpp:
+     Constructor that initializes the pregame array. Destructor to free
+     memory. A function that opens and reads the input file, copying it
+     to the pre-game board. Using the pre-game board, structs of each cell
+     in the game are filled with multiple helper functions. These are added
+     to the final game array, which is printed to cout with proper spacing
+     and added walls through another function. There are also functions that
+     add a robot char to the board, and update its position after every turn.
+
+Board.h:
+    Interface of Board class.
+
+Tree.cpp
+    Constructor that initializes the tree, and a destructor that deletes the 
+    tree (leaves first). Functions that create a tree of possible moves, with
+    different functions for each direction (if the robot was just moved 
+    north, it would only be able to move east and west directly after). There
+    is also a functon to print the parent and its children for debugging 
+    purposes. There are also functions to search through the tree and find
+    the most effecient path to the finish, and print it out.
+
+Tree.h
+    Interface of Tree class
+
+Note:  the program should handle all cases.
+
+Data Structures: I used 2 2d arrays of boards. Since the pre-game board is 
+bigger and redundant, it is implemented as a pointer to the first element, 
+while the main game board is a normal 2d array. Each cell is also a struct 
+with information about possible moves all around it. My tree contained four
+boolean pointers to children, and data of type 'Cell'. Therefore, to check
+the directions the robot can move, I just have to go in the data and check if
+the direction is true or false. I also created a struct for the correct path.
+It contains a vector of directional chars. After the correct route is found, 
+these chars are printed in the correct order.
+
+
+Testing:
+
+
+One edge case I accounted for was walls that are not directly under a cell,
+but rather under the space next to it. I got around this problem by printing
+a mixture of the main game board and the pre-game board. A difficult part of
+unit testing was figuring out how to know if my tree was created. I did this 
+by creating a print function to print chars of the parent and its children. 
+One problem I encountered was never finding the solution, because of the 
+ordering of my recursion (order I called the function again). This caused
+infinite loops and seg faults. Through cerr debugging and unit testing, I was
+able to eventually order them correctly.
+
